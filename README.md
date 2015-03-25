@@ -28,12 +28,11 @@ and end date, and a format (defaults to CSV, other options are ICAL and XML):
 calendar = Unm::Calendar.new(Date.today, Date.today + 365, "ICAL")
 ```
 
-Then perform the request (returns HTTParty request, use `body` method to
-retrieve raw string):
+Then perform the request (returns the request body):
 
 ```ruby
 request = calendar.get
-puts calendar.body
+puts request
 # Probably outputs some super long iCalendar string
 ```
 

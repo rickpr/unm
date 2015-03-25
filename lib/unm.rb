@@ -13,7 +13,7 @@ module Unm
 
     def get
       build_params
-      @calendar ||= HTTParty.get @url
+      @calendar ||= HTTParty.get(@url).body
     end
 
     private
