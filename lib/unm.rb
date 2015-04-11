@@ -1,5 +1,7 @@
 require "unm/version"
 require 'httparty'
+require 'nokogiri'
+require 'singleton'
 module Unm
 
   class Calendar
@@ -36,6 +38,26 @@ module Unm
       raise "to_date must be after from_date"       if from_date > to_date
       [from_date.strftime("%m%d%Y"), to_date.strftime("%m%d%Y")]
     end 
+
+  end
+
+  class Courses
+
+    include Singleton
+
+    def self.get
+      return @catalog if @catalog
+      subjects = HTTParty.get("http://catalog.unm.edu/catalogs/2014-2015/subjects-and-courses.xml")["data"]["subjects"]["subject"]
+      @catalog = subjects.map do |subject|
+        courses = subject["course"]
+        name    = subject["subjectName"]
+        { name => [courses].flatten.map do |course|
+          course_name = name + " " + course["name"]
+          course_description = Nokogiri::HTML.parse(HTTParty.get(course["path"])).css('.content > p').first.text rescue course["path"]
+          { "name" => course_name, "description" => course_description }
+         end }
+      end
+    end
 
   end
 

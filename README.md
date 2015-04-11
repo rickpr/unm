@@ -1,7 +1,7 @@
 # Unm
 
 This gem interacts with UNM interfaces. Currently it only works with the events
-calendar.
+calendar and course catalog.
 
 ## Installation
 
@@ -21,7 +21,7 @@ Or install it yourself as:
 
 ## Usage
 
-To use the gem, first create a new `Unm::Calendar` object by passing it a start
+To use the calendar, first create a new `Unm::Calendar` object by passing it a start
 and end date, and a format (defaults to CSV, other options are ICAL and XML):
 
 ```ruby
@@ -34,6 +34,19 @@ Then perform the request (returns the request body):
 request = calendar.get
 puts request
 # Probably outputs some super long iCalendar string
+```
+
+To get the course catalog, use `Unm::Courses.get`:
+
+``` ruby
+catalog = Unm::Courses.get
+
+=> [{"Subject" =>
+     [{"name" => "Course Name", "description" => "Course Description"},
+      {"name" => "Course Name", "description" => "Course Description"},
+      #...
+     ]
+   ]
 ```
 
 ## Contributing
