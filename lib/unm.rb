@@ -47,17 +47,32 @@ module Unm
 
     def self.get
       return @catalog if @catalog
-      subjects = HTTParty.get("http://catalog.unm.edu/catalogs/2014-2015/subjects-and-courses.xml")["data"]["subjects"]["subject"]
+      subjects = HTTParty.get("http://catalog-devl.unm.edu/catalogs/2015-2016/subjects-and-courses.xml")["data"]["subjects"]["subject"]
       @catalog = subjects.map do |subject|
         courses = subject["course"]
         name    = subject["subjectName"]
         { name => [courses].flatten.map do |course|
           course_name = name + " " + course["name"]
-          course_description = Nokogiri::HTML.parse(HTTParty.get(course["path"])).css('.content > p').first.text rescue course["path"]
-          { "name" => course_name, "description" => course_description }
+          course_page = Nokogiri::HTML.parse(HTTParty.get(URI.escape course["path"])) rescue course["path"]
+          description = course_page.css('.content > p').first.text rescue "Error loading description. Check #{course["path"]}." 
+          prerequisites = find_prerequisites(course_page) rescue "Error loading prerequisites. Check #{course["path"]}."
+          { "name" => course_name, "description" => description, "prerequisites" => prerequisites }
          end }
       end
     end
+
+    def self.find_prerequisites(site)
+      start  = site.css("hr").first
+      finish = site.css("hr")[1]
+      prerequisites = []
+      until start == finish
+        prerequisites << start.text.split("- ").last if start.css('a').any?
+        start = start.next_element
+      end
+      prerequisites
+    end
+
+    private_class_method :find_prerequisites
 
   end
 
