@@ -56,7 +56,8 @@ module Unm
           course_page = Nokogiri::HTML.parse(HTTParty.get(URI.escape course["path"])) rescue course["path"]
           description = course_page.css('.content > p').first.text rescue "Error loading description. Check #{course["path"]}." 
           prerequisites = find_prerequisites(course_page) rescue "Error loading prerequisites. Check #{course["path"]}."
-          { "name" => course_name, "description" => description, "prerequisites" => prerequisites }
+          hours = course_page.css('b').text.match(/\(\D*(\d).*\)/)[1].to_i rescue binding.pry#"Error loading hours. Check #{course["path"]}."
+          { "name" => course_name, "description" => description, "prerequisites" => prerequisites, "hours" => hours }
          end }
       end
     end
