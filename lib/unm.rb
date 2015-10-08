@@ -97,4 +97,31 @@ module Unm
 
   end
 
+  class BarRole
+    include Singleton
+
+    def self.check(candidate, bar_role = "STU_GEN_RPTS_COHORT_ANALYTICS")
+      base_uri = "http://baa.unm.edu/rest/auth/netid/"
+      auth =  { username: Unm.configuration.netid, password: Unm.configuration.password }
+      HTTParty.get(URI.join(base_uri, candidate + "/", "accessRole/", bar_role), basic_auth: auth).body == "Y"
+    end
+
+  end
+
+  class Configuration
+    attr_accessor :netid, :password
+  end
+
+
+  class << self
+
+    attr_accessor :configuration
+
+    def configure
+      self.configuration ||= Configuration.new
+      yield(configuration) if block_given?
+    end
+
+  end
+
 end
