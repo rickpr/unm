@@ -49,7 +49,7 @@ module Unm
 
       def get
         return @catalog if @catalog
-        subjects = HTTParty.get("http://catalog.unm.edu/catalogs/2015-2016/subjects-and-courses.xml")["data"]["subjects"]["subject"]
+        subjects = HTTParty.get("http://catalog.unm.edu/catalogs/2016-2017/subjects-and-courses.xml")["data"]["subjects"]["subject"]
         @catalog = subjects.map do |subject|
           courses = subject["course"]
           name    = subject["subjectName"]
