@@ -42,8 +42,8 @@ To get the course catalog, use `Unm::Courses.get`:
 catalog = Unm::Courses.get
 
 => [{"Subject" =>
-     [{"name" => "Course Name", "description" => "Course Description"},
-      {"name" => "Course Name", "description" => "Course Description"},
+     [{"name" => "Course Name", "title" => "Course Title", "description" => "Course Description"},
+      {"name" => "Course Name", "title" => "Course Title", "description" => "Course Description"},
       #...
      ]
    ]

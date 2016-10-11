@@ -56,7 +56,7 @@ module Unm
           { name => [courses].flatten.map do |course|
             course_name = name + " " + course["name"]
             course_page = Nokogiri::HTML.parse(HTTParty.get(URI.escape course["path"])) rescue course["path"]
-            course_title = course_page.css('h1').first.text rescue "Error loading course title. check #{{course['path']}}."
+            course_title = course_page.css('h1').first.text rescue "Error loading course title. Check #{course['path']}."
             description = course_page.css('.content > p').first.text rescue "Error loading description. Check #{course["path"]}."
             prerequisites = find_prerequisites(course_page) rescue "Error loading prerequisites. Check #{course["path"]}."
             hours = course_page.css('b').text.match(/\(\D*(\d).*\)/)[1].to_i rescue "Error loading hours. Check #{course["path"]}."
