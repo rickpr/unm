@@ -47,9 +47,10 @@ module Unm
 
     class << self
 
-      def get
+      def get(catalog_year = 2017)
         return @catalog if @catalog
-        subjects = HTTParty.get("http://catalog.unm.edu/catalogs/2016-2017/subjects-and-courses.xml")["data"]["subjects"]["subject"]
+        catalog_year = catalog_year.to_s << "-" << catalog_year.next.to_s
+        subjects = HTTParty.get("http://catalog.unm.edu/catalogs/#{catalog_year}/subjects-and-courses.xml")["data"]["subjects"]["subject"]
         @catalog = subjects.map do |subject|
           courses = subject["course"]
           name    = subject["subjectName"]
