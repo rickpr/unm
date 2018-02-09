@@ -49,6 +49,12 @@ catalog = Unm::Courses.get
    ]
 ```
 
+You can also add another catalog year if you'd like an older one:
+
+``` ruby
+catalog = Unm::Courses.get(2016)
+```
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/unm/fork )
